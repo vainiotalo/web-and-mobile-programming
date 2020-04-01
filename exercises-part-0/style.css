@@ -1,0 +1,24 @@
+a:hover {
+    font-weight: bold;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+td, th{
+    border: 1px solid black;
+    text-align: left;
+}
+
+tr:nth-child(even){
+    background-color: lightgrey;
+}
+
+#company{
+    font-style: italic;
+}
+
+.form-example{
+    font-weight: bold;
+}
