@@ -1,4 +1,0 @@
-Exercises 2.1 - 2.3: part2
-Exercises 2.4 - 2.10: telephone
-
-node_modules excluded
