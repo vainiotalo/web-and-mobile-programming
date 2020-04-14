@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 app.use(bodyParser.json())
+app.use(cors())
 
 let persons = [
     {
@@ -26,6 +28,22 @@ let persons = [
         id: 4
     }
 ]
+
+const logger = (req, res, next) => {
+    console.log('Method: ', req.method)
+    console.log('Path: ', req.path)
+    console.log('Body: ', req.body)
+    console.log('---')
+    next()
+}
+
+app.use(logger)
+
+const error = (req, res) => {
+    response.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(error)
 
 const generateId = () => {
     min = Math.ceil(4);
@@ -81,7 +99,7 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
