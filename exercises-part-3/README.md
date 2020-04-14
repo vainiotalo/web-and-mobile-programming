@@ -1,7 +1,8 @@
 ## Exercises Part 3
 
 Link to application:
-<fullstack-telephone.herokuapp.com>
+
+<https://fullstack-telephone.herokuapp.com>
 
 Project directory navigation:
 
