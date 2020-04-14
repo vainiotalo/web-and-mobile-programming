@@ -1,6 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 
+const baseUrl = '/api/persons'
+
+const getAll = () => {
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props)
@@ -13,7 +20,7 @@ class App extends React.Component {
 
     componentDidMount() {
         axios
-            .get('http://localhost:3001/api/persons')
+            .get('https://fullstack-telephone.herokuapp.com/api/persons')
             .then(response => {
                 this.setState({ persons: response.data })
             })
@@ -31,7 +38,7 @@ class App extends React.Component {
             alert("Nimi ja/tai numero on jo luettelossa")
         } 
         else {
-            axios.post('http://localhost:3001/api/persons', personObject)
+            axios.post('https://fullstack-telephone.herokuapp.com/api/persons', personObject)
             .then(response => {
                 this.setState({
                 persons: this.state.persons.concat(response.data),
@@ -45,7 +52,7 @@ class App extends React.Component {
     removePerson = (event) => {
         const id = parseInt([event.target.id])
         const name = [event.target.name]
-        const url = 'http://localhost:3001/api/persons/' + id
+        const url = 'https://fullstack-telephone.herokuapp.com/api/persons/' + id
 
         if(window.confirm('poistetaanko ' + name)){
 
@@ -107,7 +114,7 @@ const Directory = ({ entries, handleClick }) => {
         <div>
         <style>{`
             table{
-                width:10%;
+                width:25%;
                 text-align: left;
             }
         `}</style>

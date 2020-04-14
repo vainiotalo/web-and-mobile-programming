@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use(express.static('build'))
 
 let persons = [
     {
@@ -38,12 +39,6 @@ const logger = (req, res, next) => {
 }
 
 app.use(logger)
-
-const error = (req, res) => {
-    response.status(404).send({error: 'unknown endpoint'})
-}
-
-app.use(error)
 
 const generateId = () => {
     min = Math.ceil(4);
