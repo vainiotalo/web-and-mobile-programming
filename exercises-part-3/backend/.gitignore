@@ -3,3 +3,5 @@
 
 # Ignore REST client requests
 /requests
+
+.env
