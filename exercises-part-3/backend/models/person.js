@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 
-const password = ''
-
-const url = `mongodb+srv://fullstack:${password}@persons-lqwpf.mongodb.net/fullstack-persons`
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 

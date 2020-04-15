@@ -1,12 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-
-const baseUrl = '/api/persons'
-
-const getAll = () => {
-    const request = axios.get(baseUrl)
-    return request.then(response => response.data)
-}
+import personService from './services/persons'
 
 class App extends React.Component {
     constructor(props) {
@@ -19,8 +12,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        axios
-            .get('https://fullstack-telephone.herokuapp.com/api/persons')
+        personService
+            .getAll()
             .then(response => {
                 this.setState({ persons: response.data })
             })
@@ -38,26 +31,27 @@ class App extends React.Component {
             alert("Nimi ja/tai numero on jo luettelossa")
         } 
         else {
-            axios.post('https://fullstack-telephone.herokuapp.com/api/persons', personObject)
-            .then(response => {
-                this.setState({
-                persons: this.state.persons.concat(response.data),
-                newName: '',
-                newNumber: ''
+            personService
+                .create(personObject)
+                .then(response => {
+                    this.setState({
+                    persons: this.state.persons.concat(response.data),
+                    newName: '',
+                    newNumber: ''
+                    })
                 })
-            })
         }
     }
 
     removePerson = (event) => {
-        const id = parseInt([event.target.id])
+        let id = JSON.stringify([event.target.id])
+        id = id.substring(2,id.length-2)
         const name = [event.target.name]
-        const url = 'https://fullstack-telephone.herokuapp.com/api/persons/' + id
 
-        if(window.confirm('poistetaanko ' + name)){
+        if(window.confirm(`poistetaanko ${name}`)){
 
-        axios
-            .delete(url)
+        personService
+            .remove(id)
             .then(response => {
                 this.setState({
                     persons: this.state.persons.filter(person => person.id !== id)
@@ -114,7 +108,7 @@ const Directory = ({ entries, handleClick }) => {
         <div>
         <style>{`
             table{
-                width:25%;
+                width:30%;
                 text-align: left;
             }
         `}</style>
