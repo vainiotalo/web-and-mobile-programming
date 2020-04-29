@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Text, View, TextInput, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,42 +12,47 @@ const StatusBar = () => {
 }
 
 const NoteList = () => {
+    const [notes, setNotes] = useState([]);
+
+    const updateNotes = (text) => {
+        setNotes(notes.concat(text))
+    }
+
     return (
         <View style = {{flex: 1}}>
             <StatusBar />
-            <Text>Note 1</Text>
-            <Text>Note 2</Text>
-            <Text>Note 3</Text>
-            <Text>Note 4</Text>
-            <Text>Note 5</Text>
-            <Text>Note 6</Text>
-            <Text>Note 7</Text>
-            <Text>Note 8</Text>
-            <Text>Note 9</Text>
-            <Text>Note 10</Text>
-            <Text>Note 11</Text>
-            <Text>Note 12</Text>
-            <Text>Note 13</Text>
-            <Text>Note 14</Text>
-            <Text>Note 15</Text>
-            <Text>Note 16</Text>
-            <Text>Note 17</Text>
-            <Text>Note 18</Text>
-            <Text>Note 19</Text>
-            <Text>Note 20</Text>
-            <Text>Note 21</Text>
+            {notes.map((note, index) => {
+                return(
+                    <Text key={index}>{note}</Text>
+                )
+            })}
             <View style={{flex: 1,justifyContent: 'flex-end'}}>
-                <NoteForm />
+                <NoteForm onPress={updateNotes}/>
             </View>
         </View>
     );
 }
 
-const NoteForm = () => {
+const NoteForm = props => {
+    const [text, setText] = useState('');
+    const [newText, setNewText] = useState('');
+
+    const handlePress = () => {
+        props.onPress(newText)
+    }
+
+    const handleChange = (text) => {
+        setNewText(text)
+    }
+
     return (
         <View>
-            <TextInput placeholder="Write the note here"/>
-            <Button title="ADD NOTE" />
+            <TextInput
+                placeholder="Write the note here"
+                onChangeText={handleChange}
+                defaultValue={text}
+            />
+            <Button title="ADD NOTE" onPress={handlePress}/>
         </View>
     );
 }
@@ -55,6 +60,7 @@ const NoteForm = () => {
 const Stack = createStackNavigator();
 
 const App = () => {
+
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}}>
