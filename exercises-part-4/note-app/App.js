@@ -3,11 +3,12 @@ import { Text, View, TextInput, Button, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
+import styles from './styles';
 
 const StatusBar = () => {
     const height = Constants.statusBarHeight
     return(
-        <View style={{height}}></View>
+        <View style={{height}} />
     )
 }
 
@@ -19,28 +20,28 @@ const NoteList = () => {
     }
 
     return (
-        <View style = {{flex: 1}}>
+        <View style={{flex: 1}}>
             <StatusBar />
-            <ScrollView>
+            <ScrollView style={styles.notelist}>
                 {notes.map((note, index) => {
                     return(
-                        <Text key={index}>{note}</Text>
+                        <Text key={index} style={styles.notelist}>{` - ${note}`}</Text>
                     )
                 })}
             </ScrollView>
-            <View style={{justifyContent: 'flex-end'}}>
+            <View style={{justifyContent: "flex-end"}}>
                 <NoteForm onPress={updateNotes}/>
             </View>
         </View>
     );
 }
 
-const NoteForm = props => {
+const NoteForm = ({ onPress }) => {
     const [text, setText] = useState('');
     const [newText, setNewText] = useState('');
 
     const handlePress = () => {
-        props.onPress(newText)
+        onPress(newText)
     }
 
     const handleChange = (text) => {
@@ -48,13 +49,18 @@ const NoteForm = props => {
     }
 
     return (
-        <View>
+        <View style={styles.noteform}>
             <TextInput
                 placeholder="Write the note here"
                 onChangeText={handleChange}
                 defaultValue={text}
+                style={styles.noteform}
             />
-            <Button title="ADD NOTE" onPress={handlePress}/>
+            <Button
+                title="ADD NOTE"
+                onPress={handlePress}
+                color="#B90E0A"
+            />
         </View>
     );
 }
