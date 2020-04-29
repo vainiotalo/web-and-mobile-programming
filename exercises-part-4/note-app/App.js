@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
+import { Text, View, TextInput, Button, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
@@ -21,12 +21,14 @@ const NoteList = () => {
     return (
         <View style = {{flex: 1}}>
             <StatusBar />
-            {notes.map((note, index) => {
-                return(
-                    <Text key={index}>{note}</Text>
-                )
-            })}
-            <View style={{flex: 1,justifyContent: 'flex-end'}}>
+            <ScrollView>
+                {notes.map((note, index) => {
+                    return(
+                        <Text key={index}>{note}</Text>
+                    )
+                })}
+            </ScrollView>
+            <View style={{justifyContent: 'flex-end'}}>
                 <NoteForm onPress={updateNotes}/>
             </View>
         </View>
