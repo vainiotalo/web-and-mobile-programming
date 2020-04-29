@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
-import { Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, TextInput, Button, ScrollView, Alert, AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
@@ -89,7 +89,18 @@ const Stack = createStackNavigator();
 const App = () => {
     const [notes, setNotes] = useState([]);
 
-    const updateNotes = (text) => {
+    const getNotes = async() => {
+        let noteArray = await AsyncStorage.getItem('notes')
+        noteArray = JSON.parse(noteArray)
+        return noteArray
+    }
+
+    useEffect(() => {
+        getNotes()
+        .then(setNotes)
+    }, [])
+
+    const updateNotes = async(text) => {
         if (notes.filter(note => note === text).length > 0) {
             Alert.alert(
                 "Invalid input",
@@ -114,6 +125,7 @@ const App = () => {
             )
         } else {
             setNotes(notes.concat(text))
+            AsyncStorage.setItem('notes', JSON.stringify(notes))
         }
     }
 
@@ -121,7 +133,7 @@ const App = () => {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Notes">
                     <Stack.Screen name="Notes">
-                        {props => <NoteList {...props} notes={notes}/>}
+                        {props => <NoteList {...props} notes={notes}/>} 
                     </Stack.Screen>
                     <Stack.Screen name="New note">
                         {props => <NoteForm {...props} onPress={updateNotes}/>}

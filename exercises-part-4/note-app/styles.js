@@ -2,7 +2,9 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     headerMain: {
-        alignItems: "flex-end"
+        alignItems: "flex-end",
+        borderBottomColor: "#E1C699",
+        borderBottomWidth: 2
     },
     headerForm: {
         alignItems: "flex-start",
@@ -20,11 +22,9 @@ const styles = StyleSheet.create({
     },
     noteList: {
         fontSize: 20,
-        borderTopColor: "#E1C699",
-        borderTopWidth: 1,
         backgroundColor: "#F9E4B7",
         borderBottomColor: "#E1C699",
-        borderBottomWidth: 2
+        borderBottomWidth: 1
     }
 })
 
