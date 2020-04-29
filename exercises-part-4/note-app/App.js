@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button, ScrollView } from 'react-native';
+import { Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
@@ -16,7 +16,31 @@ const NoteList = () => {
     const [notes, setNotes] = useState([]);
 
     const updateNotes = (text) => {
-        setNotes(notes.concat(text))
+        if (notes.filter(note => note === text).length > 0) {
+            Alert.alert(
+                "Invalid input",
+                "Note already exists",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => { return null }
+                    }
+                ]
+            )
+        } else if (text === undefined || text === '') {
+            Alert.alert(
+                "Invalid input",
+                "Note cannot be empty",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => { return null }
+                    }
+                ]
+            )
+        } else {
+            setNotes(notes.concat(text))
+        }
     }
 
     return (
