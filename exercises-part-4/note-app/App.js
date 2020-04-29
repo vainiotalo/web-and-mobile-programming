@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { Text, View, TextInput, Button, ScrollView, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -5,14 +6,87 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
 import styles from './styles';
 
-const StatusBar = () => {
-    const height = Constants.statusBarHeight
-    return(
-        <View style={{height}} />
-    )
+const Header = ({ title, navigate }) => {
+    if (title === "NEW NOTE") {
+        return(
+            <View style={styles.headerMain}>
+                <View style={{height: Constants.statusBarHeight}} />
+                <View style={styles.headerButton}>
+                    <Button title={title}
+                            onPress={navigate}
+                            color="#B90E0A"
+                    />
+                </View>
+            </View>
+        )
+    } else {
+        return(
+            <View style={styles.headerForm}>
+                <View style={{height: Constants.statusBarHeight}} />
+                <View style={styles.headerButton}>
+                    <Button title={title}
+                            onPress={navigate}
+                            color="#B90E0A"
+                    />
+                </View>
+            </View>
+        )
+    }
 }
 
-const NoteList = () => {
+const NoteList = ({ navigation, notes }) => {
+    return (
+        <View style={{flex: 1}}>
+            <Header title="NEW NOTE" navigate={() => navigation.navigate("New note")} />
+            <ScrollView style={styles.noteList}>
+                {notes.map((note, index) => {
+                    return(
+                        <Text key={index} style={styles.noteList}>{note}</Text>
+                    )
+                })}
+            </ScrollView>
+        </View>
+    );
+}
+
+const NoteForm = ({ navigation, onPress }) => {
+    const [text, setText] = useState('');
+    const [newText, setNewText] = useState('');
+
+    const handlePress = () => {
+        onPress(newText)
+    }
+
+    const handleChange = (text) => {
+        setNewText(text)
+    }
+
+    return (
+        <View style={{flex: 1, flexDirection: 'column'}}>
+        <Header title="<" navigate={() => navigation.navigate("Notes")} />
+        <View style={styles.noteForm}>
+            <View style={{flex: 1}}>
+            <TextInput
+                placeholder="Write the note here"
+                onChangeText={handleChange}
+                defaultValue={text}
+                style={styles.noteForm}
+                multiline={true}
+            />
+            </View>
+            <Button
+                title="ADD NOTE"
+                onPress={handlePress}
+                color="#B90E0A"
+            />
+        </View>
+        </View>
+    );
+}
+
+const Stack = createStackNavigator();
+
+const App = () => {
     const [notes, setNotes] = useState([]);
 
     const updateNotes = (text) => {
@@ -44,59 +118,14 @@ const NoteList = () => {
     }
 
     return (
-        <View style={{flex: 1}}>
-            <StatusBar />
-            <ScrollView style={styles.notelist}>
-                {notes.map((note, index) => {
-                    return(
-                        <Text key={index} style={styles.notelist}>{` - ${note}`}</Text>
-                    )
-                })}
-            </ScrollView>
-            <View style={{justifyContent: "flex-end"}}>
-                <NoteForm onPress={updateNotes}/>
-            </View>
-        </View>
-    );
-}
-
-const NoteForm = ({ onPress }) => {
-    const [text, setText] = useState('');
-    const [newText, setNewText] = useState('');
-
-    const handlePress = () => {
-        onPress(newText)
-    }
-
-    const handleChange = (text) => {
-        setNewText(text)
-    }
-
-    return (
-        <View style={styles.noteform}>
-            <TextInput
-                placeholder="Write the note here"
-                onChangeText={handleChange}
-                defaultValue={text}
-                style={styles.noteform}
-            />
-            <Button
-                title="ADD NOTE"
-                onPress={handlePress}
-                color="#B90E0A"
-            />
-        </View>
-    );
-}
-
-const Stack = createStackNavigator();
-
-const App = () => {
-
-    return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
-                    <Stack.Screen name="notes" component={NoteList} />
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Notes">
+                    <Stack.Screen name="Notes">
+                        {props => <NoteList {...props} notes={notes}/>}
+                    </Stack.Screen>
+                    <Stack.Screen name="New note">
+                        {props => <NoteForm {...props} onPress={updateNotes}/>}
+                    </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );
